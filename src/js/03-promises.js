@@ -1,4 +1,6 @@
 import Notiflix from 'notiflix';
+import flatpickr from "flatpickr";
+
 const delay = document.querySelector('input[name="delay"]');
 const step = document.querySelector('input[name="step"]');
 const amount = document.querySelector('input[name="amount"]');
