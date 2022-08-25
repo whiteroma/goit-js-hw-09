@@ -1,10 +1,10 @@
 import Notiflix from 'notiflix';
 import flatpickr from "flatpickr";
 
-const delay = document.querySelector('input[name="delay"]');
-const step = document.querySelector('input[name="step"]');
-const amount = document.querySelector('input[name="amount"]');
-const btnCreatePromise = document.querySelector('button[type="submit"]');
+
+const refs = {
+  form: document.querySelector('.form')
+};
 
 function createPromise(position, delay) {
   const promise = new Promise((resolve, reject) => {
@@ -20,21 +20,22 @@ function createPromise(position, delay) {
   return promise;
 }
 
-btnCreatePromise.addEventListener('click', e => {
+refs.form.addEventListener('submit', e => {
   e.preventDefault();
-  let firstDelay = Number(delay.value);
-  let delayStep = Number(step.value);
-  for (let i = 0; i < amount.value; i++) {
-    createPromise(1 + i, firstDelay + i * delayStep)
-      .then(({ position, delay }) => {
-        Notiflix.Notify.success(
-          `Fulfilled promise ${position} in ${delay}ms`
-        );
-      })
-      .catch(({ position, delay }) => {
-        Notiflix.Notify.failure(
-          `Rejected promise ${position} in ${delay}ms`
-        );
-      });
-  }
-});
+  
+let delay = e.currentTarget.delay.valueAsNumber;
+const step = e.currentTarget.step.valueAsNumber;
+const amount = e.currentTarget.amount.valueAsNumber;
+
+
+for (let position = 1; position <= amount; position += 1) {
+  createPromise(position, delay)
+  .then(({ position, delay }) => {
+    Notiflix.Notify.success(`✅ Fulfilled promise ${position} in ${delay}ms`);
+  })
+  .catch(({ position, delay }) => {
+    Notiflix.Notify.failure(`❌ Rejected promise ${position} in ${delay}ms`);
+  });
+delay += step;
+}})
+

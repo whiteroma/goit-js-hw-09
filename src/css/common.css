@@ -53,6 +53,11 @@ button {
   padding: 10px
 }
 
+.switcher:disabled {
+  background-color: grey;
+  cursor:not-allowed;
+}
+
 .switcher:first-child {
   margin-right: 20px;
 }

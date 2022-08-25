@@ -3,7 +3,7 @@ import flatpickr from "flatpickr";
 import 'flatpickr/dist/flatpickr.min.css';
 
 const refs = {
-    text: document.querySelector('input#datetime-picker'),
+    input: document.querySelector('input#datetime-picker'),
     timerHtml: document.querySelector('.timer'),
     btnStart: document.querySelector('button[data-start]'),
     seconds: document.querySelector('span[data-seconds]'),
@@ -48,7 +48,7 @@ function convertMs(ms) {
     },
   };
 
-  const fp = flatpickr(refs.text, options);
+  const fp = flatpickr(refs.input, options);
 
   function addLeadingZero(value) {
     return value.toString().padStart(2, '0');
@@ -57,15 +57,20 @@ function convertMs(ms) {
   
 refs.btnStart.addEventListener('click', () => {
   refs.timerHtml.style.color = 'blue';
+  refs.btnStart.disabled = true;
+  refs.input.disabled = true;
   let timer = setInterval(() => {
-    let countdown = new Date(refs.text.value) - new Date();
-    refs.btnStart.disabled = true;
+    let countdown = new Date(refs.input.value) - new Date();
+    if(refs.btnStart.disabled && refs.input.disabled) {
+      refs.input.style.cursor = 'not-allowed',
+      refs.btnStart.style.cursor = 'not-allowed'
+    }
     if (countdown >= 0) {
       let timeObject = convertMs(countdown);
-      refs.days.textContent = addLeadingZero(timeObject.days);
-      refs.hours.textContent = addLeadingZero(timeObject.hours);
-      refs.minutes.textContent = addLeadingZero(timeObject.minutes);
-      refs.seconds.textContent = addLeadingZero(timeObject.seconds);
+      refs.days.inputContent = addLeadingZero(timeObject.days);
+      refs.hours.inputContent = addLeadingZero(timeObject.hours);
+      refs.minutes.inputContent = addLeadingZero(timeObject.minutes);
+      refs.seconds.inputContent = addLeadingZero(timeObject.seconds);
       if (countdown <= 10000) {
         refs.timerHtml.style.color = 'tomato';
       }
